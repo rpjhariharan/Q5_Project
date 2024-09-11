@@ -1,0 +1,59 @@
+1. List all employees who are managers.
+SELECT e.employee_id, e.first_name, e.last_name, e.job_id, j.job_title
+FROM Employees e
+JOIN Jobs j ON e.job_id = j.job_id
+WHERE j.job_title LIKE '%Manager%';
+
+2. Find the total salary expenditure per department.
+SELECT d.department_name, SUM(e.salary) AS total_salary_expenditure
+FROM Employees e
+JOIN Departments d ON e.department_id = d.department_id
+GROUP BY d.department_name;
+
+3. List the employees working on more than one project.
+SELECT e.employee_id, e.first_name, e.last_name, COUNT(ep.project_id) AS project_count
+FROM Employees e
+JOIN EmployeesProjects ep ON e.employee_id = ep.employee_id
+GROUP BY e.employee_id, e.first_name, e.last_name
+HAVING COUNT(ep.project_id) > 1;
+
+4. Find the projects that have not ended yet.
+SELECT project_id, project_name, start_date, end_date
+FROM Projects
+WHERE end_date IS NULL OR end_date > CURRENT_DATE;
+
+5. Identify the highest and lowest salaries for each job role.
+SELECT j.job_title, MAX(e.salary) AS highest_salary, MIN(e.salary) AS lowest_salary
+FROM Employees e
+JOIN Jobs j ON e.job_id = j.job_id
+GROUP BY j.job_title;
+
+6. List all employees whose email address contains ‘company’.
+SELECT employee_id, first_name, last_name, email
+FROM Employees
+WHERE email LIKE '%company%';
+
+7. Find the total number of employees in each department.
+SELECT d.department_name, COUNT(e.employee_id) AS total_employees
+FROM Employees e
+JOIN Departments d ON e.department_id = d.department_id
+GROUP BY d.department_name;
+
+8. Calculate the average salary for each department.
+SELECT d.department_name, AVG(e.salary) AS average_salary
+FROM Employees e
+JOIN Departments d ON e.department_id = d.department_id
+GROUP BY d.department_name;
+
+9. List the employees who joined the company before 2020.
+SELECT employee_id, first_name, last_name, hire_date
+FROM Employees
+WHERE hire_date < '2020-01-01';
+
+10. Display the details of projects handled by IT department employees.
+SELECT p.project_id, p.project_name, p.start_date, p.end_date, e.employee_id, e.first_name, e.last_name
+FROM Projects p
+JOIN EmployeesProjects ep ON p.project_id = ep.project_id
+JOIN Employees e ON ep.employee_id = e.employee_id
+JOIN Departments d ON e.department_id = d.department_id
+WHERE d.department_name = 'IT';
